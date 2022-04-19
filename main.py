@@ -79,9 +79,9 @@ while True:
   
   raw_temps = (t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t10,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30)
   avg_temp = sum(raw_temps)/30
-  temperature = round(27 - (avg_temp - 0.706)/0.001721,1)
+  temperature = 27 - (avg_temp - 0.706)/0.001721
   temp_percent = map(temperature,15,50,0,100)
-  temp_f = (temperature * 1.8 + 32)
+  temp_f = round((temperature * 1.8 + 32),1)
 
 
   pot_value = pot.read_u16()
