@@ -7,7 +7,7 @@ led.freq(25000)
 fan = PWM(Pin(21))
 fan.freq(25000)
 sensor_temp = machine.ADC(4)
-conversion_factor = 3.228 / (65535)
+conversion_factor = 3.26 / (65535)
 
 
 def map (x, in_min, in_max, out_min, out_max):
@@ -80,12 +80,12 @@ while True:
   raw_temps = (t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t10,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30)
   avg_temp = sum(raw_temps)/30
   temperature = 27 - (avg_temp - 0.706)/0.001721
-  temp_percent = map(temperature,15,50,0,100)
   temp_f = round((temperature * 1.8 + 32),1)
+  temp_percent = map(temperature,15,45,0,100)
 
 
   pot_value = pot.read_u16()
-  pot_percentage = map(pot_value,300,65535,50,150)
+  pot_percentage = map(pot_value,300,65535,100,100)
 
   output_percentage = (temp_percent * pot_percentage / 100)
   
