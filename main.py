@@ -1,13 +1,26 @@
 from machine import Pin, ADC, PWM
 import utime
 
+#Temp variables below
+min_temp = 18
+max_temp = 50
+
+#fan duty at min/max temps
+min_duty = 25
+max_duty = 75
+
+#temp calibration
+#Raise first value to reduce temp reading, lower value to increase reading
+conversion_factor = 3.255 / (65535)
+
+
 pot = machine.ADC(26) 
 led = PWM(Pin(25))
 led.freq(25000)
 fan = PWM(Pin(21))
 fan.freq(25000)
 sensor_temp = machine.ADC(4)
-conversion_factor = 3.26 / (65535)
+
 
 
 def map (x, in_min, in_max, out_min, out_max):
@@ -81,7 +94,7 @@ while True:
   avg_temp = sum(raw_temps)/30
   temperature = 27 - (avg_temp - 0.706)/0.001721
   temp_f = round((temperature * 1.8 + 32),1)
-  temp_percent = map(temperature,15,45,0,100)
+  temp_percent = map(temperature,min_temp,max_temp,min_duty,max_duty)
 
 
   pot_value = pot.read_u16()
@@ -89,11 +102,8 @@ while True:
 
   output_percentage = (temp_percent * pot_percentage / 100)
   
-
   pwm_value = map(output_percentage,0,100,0,65535)
-
   pwm_output = min(max(9830,pwm_value),65535)
-  
   
   print("Temp C:",temperature, "Temp F:",temp_f, "Temp percentage:",temp_percent, "Pot Percentage:",pot_percentage, "Pot Value",pot_value, "Final Percent",output_percentage,"pwm value",pwm_value,"Output PWM",pwm_output)
   led.duty_u16(pwm_output)
